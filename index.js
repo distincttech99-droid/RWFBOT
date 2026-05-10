@@ -1,3 +1,13 @@
+import http from 'http';
+
+// Create a tiny server to satisfy Railway's health checks
+const port = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('RWF Bot is Active');
+}).listen(port);
+
+console.log(`[Railway] Health check server listening on port ${port}`);
 import { Client, GatewayIntentBits } from 'discord.js';
 import { botConfig } from './bot.js'; // This imports your settings like colors and presence
 
