@@ -1,11 +1,11 @@
-import http from 'http';
+// REPLACE THE FIRST 10 LINES WITH THIS:
+import http from 'node:http';
 
-// Create a tiny server to satisfy Railway's health checks
 const port = process.env.PORT || 3000;
 http.createServer((req, res) => {
   res.writeHead(200);
   res.end('RWF Bot is Active');
-}).listen(port);
+}).listen(port, '0.0.0.0'); // Adding '0.0.0.0' helps Railway find it faster
 
 console.log(`[Railway] Health check server listening on port ${port}`);
 import { Client, GatewayIntentBits } from 'discord.js';
