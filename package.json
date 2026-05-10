@@ -1,5 +1,6 @@
 {
   "name": "titanbot-custom",
+  "type": "module",
   "version": "2.0.0",
   "description": "Modular Ultimate Community Bot by Touchpoint Support",
   "main": "src/app.js",
