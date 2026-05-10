@@ -9,7 +9,7 @@ http.createServer((req, res) => {
 
 console.log(`[Railway] Health check server listening on port ${port}`);
 import { Client, GatewayIntentBits } from 'discord.js';
-import { botConfig } from './src/config/bot.js'; // This imports your settings like colors and presence
+//import { botConfig } from './src/config/bot.js'; // This imports your settings like colors and presence
 
 // 1. Initialize the Bot with permissions to see members
 const client = new Client({
