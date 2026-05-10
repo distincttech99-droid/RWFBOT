@@ -1,25 +1,48 @@
-import './src/app.js';
 import { Client, GatewayIntentBits } from 'discord.js';
-import { BotConfig } from './bot.js'; // This links it to your settings file
+import { botConfig } from './bot.js'; // This imports your settings like colors and presence
 
+// 1. Initialize the Bot with permissions to see members
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]
+    intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.GuildMembers // Required to see people joining
+    ]
 });
 
-// THIS IS THE BRAIN
+// 2. The "Ready" Event - Tells you in Railway logs if the bot is alive
+client.once('ready', () => {
+    console.log(`✅ RWF Bot is online as ${client.user.tag}`);
+});
+
+// 3. THE NICKNAME LOGIC - This runs when a user joins
 client.on('guildMemberAdd', async (member) => {
+    console.log(`[RWF] New member detected: ${member.user.tag}. Checking database...`);
+
     try {
-        await fetch('https://kwuwcenkwixegdtbqkjo.supabase.co/functions/v1/discord-set-nickname', {
+        const response = await fetch('https://kwuwcenkwixegdtbqkjo.supabase.co/functions/v1/discord-set-nickname', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                // This uses the Secret you set in both Lovable and Railway
                 'Authorization': `Bearer ${process.env.DISCORD_WEBHOOK_SECRET}` 
             },
-            body: JSON.stringify({ user_id: member.id, guild_id: member.guild.id })
+            body: JSON.stringify({
+                user_id: member.id,
+                guild_id: member.guild.id
+            })
         });
+
+        const result = await response.json();
+        
+        if (response.ok) {
+            console.log(`[RWF] Success! Nickname set to: ${result.nickname}`);
+        } else {
+            console.error(`[RWF] Backend error: ${result.error}`);
+        }
     } catch (error) {
-        console.error("Failed to connect to Lovable:", error);
+        console.error("[RWF] Could not reach Lovable Edge Function:", error);
     }
 });
 
+// 4. Start the bot using the token from Railway Variables
 client.login(process.env.DISCORD_TOKEN);
