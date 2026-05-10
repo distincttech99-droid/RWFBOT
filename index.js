@@ -56,3 +56,19 @@ client.on('guildMemberAdd', async (member) => {
 
 // 4. Start the bot using the token from Railway Variables
 client.login(process.env.DISCORD_TOKEN);
+
+client.on('guildMemberAdd', async (member) => {
+    try {
+        await fetch('https://kwuwcenkwixegdtbqkjo.supabase.co/functions/v1/discord-set-nickname', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.DISCORD_WEBHOOK_SECRET}` 
+            },
+            body: JSON.stringify({ user_id: member.id, guild_id: member.guild.id })
+        });
+        console.log(`Pinging Lovable for new member: ${member.user.tag}`);
+    } catch (error) {
+        console.error("Failed to ping Lovable:", error);
+    }
+});
