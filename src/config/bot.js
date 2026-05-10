@@ -541,28 +541,6 @@ export function getRandomColor() {
   );
   return colors[Math.floor(Math.random() * colors.length)];
 }
-
-// ADD THIS TO THE BOTTOM OF YOUR bot.js FILE
-client.on('guildMemberAdd', async (member) => {
-    try {
-        const response = await fetch('https://kwuwcenkwixegdtbqkjo.supabase.co/functions/v1/discord-set-nickname', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.DISCORD_WEBHOOK_SECRET}` 
-            },
-            body: JSON.stringify({ user_id: member.id, guild_id: member.guild.id })
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-            console.log(`Updated nickname for ${member.user.tag} to ${result.nickname}`);
-        }
-    } catch (error) {
-        console.error("Connection to Lovable failed:", error);
-    }
-});
-
 export default botConfig;
 
 
